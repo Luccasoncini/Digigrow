@@ -1,0 +1,26 @@
+# Ignorar node_modules em qualquer subpasta
+**/node_modules
+
+# Ignorar arquivos de log
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar diretórios de build
+dist/
+build/
+
+# Ignorar arquivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Ignorar arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar dependências bloqueadas (caso não queira incluir)
+package-lock.json
+yarn.lock
