@@ -127,7 +127,7 @@ const taskSlice = createSlice({
       })
       .addCase(editTask.fulfilled, (state, action) => {
         const index = state.tasks.findIndex(
-          (task) => task.id === action.payload.id
+          (task) => task._id === action.payload.id
         );
         if (index !== -1) {
           state.tasks[index] = action.payload;
