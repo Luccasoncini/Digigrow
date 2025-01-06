@@ -1,39 +1,22 @@
-import React, { useEffect, useState } from "react";
-import api from "../api";
+import { useEffect } from "react";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
 import "../App.scss";
+import { useDispatch } from "react-redux";
+import { fetchTasks } from "../redux/taskSlice";
 
 function Home() {
-  const [tasks, setTasks] = useState([]);
-
-  // Carregar tarefas
-  const fetchTasks = async () => {
-    const response = await api.get("/");
-    setTasks(response.data);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchTasks();
+    dispatch(fetchTasks());
   }, []);
-
-  // Adicionar tarefa
-  const addTask = async (task) => {
-    await api.post("/", task);
-    fetchTasks();
-  };
-
-  // Excluir tarefa
-  const deleteTask = async (id) => {
-    await api.delete(`/${id}`);
-    fetchTasks();
-  };
 
   return (
     <div className="App">
       <h1>Lista de tarefas</h1>
-      <TaskForm onAddTask={addTask} />
-      <TaskList tasks={tasks} onDeleteTask={deleteTask} />
+      <TaskForm />
+      <TaskList />
     </div>
   );
 }

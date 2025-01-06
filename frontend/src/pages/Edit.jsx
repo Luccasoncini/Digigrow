@@ -1,75 +1,54 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api";
-import { toast } from "react-toastify";
 import { ArrowBackIcon } from "../images/ArrowBackIcon";
+import { useDispatch, useSelector } from "react-redux";
+import { editTask, fetchTask, onChangeEditValue } from "../redux/taskSlice";
 
 function EditTask() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [errors, setErrors] = useState({});
-
-  const fetchTask = async () => {
-    try {
-      const response = await api.get(`/${id}`);
-      setTitle(response.data.title);
-      setDescription(response.data.description);
-    } catch (error) {
-      toast.error("Erro ao carregar a tarefa.");
-    }
-  };
+  const dispatch = useDispatch();
+  const task = useSelector((state) => state.task.editTask);
 
   useEffect(() => {
-    fetchTask();
+    dispatch(fetchTask(id));
   }, [id]);
 
-  const validate = () => {
-    if (!title.trim()) {
-      toast.error("O título não pode ser vazio.");
-      return false;
-    }
-    if (description.length > 255) {
-      toast.error("A descrição não pode ter mais de 255 caracteres.");
-      return false;
-    }
-    return true;
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const resultAction = await dispatch(
+      editTask({ id, title: task.title, description: task.description })
+    );
 
-  const handleUpdateTask = async () => {
-    if (validate()) {
-      try {
-        await api.put(`/${id}`, { title, description });
-        toast.success("Tarefa atualizada com sucesso!");
-        navigate("/");
-        setErrors({});
-      } catch (error) {
-        toast.error("Erro ao atualizar a tarefa.");
-      }
+    if (editTask.fulfilled.match(resultAction)) {
+      navigate("/");
     }
   };
 
   return (
     <div className="App" style={{ position: "relative" }}>
       <h1>Editar Tarefa</h1>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <button onClick={() => navigate("/")} className="return-button">
+        <ArrowBackIcon size="24" />
+      </button>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={task.title}
+          onChange={(e) =>
+            dispatch(onChangeEditValue(["title", e.target.value]))
+          }
           placeholder="Título"
         />
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={task.description}
+          onChange={(e) =>
+            dispatch(onChangeEditValue(["description", e.target.value]))
+          }
           placeholder="Descrição"
         />
 
-        <button onClick={() => navigate("/")} className="return-button">
-          <ArrowBackIcon size="24" />
-        </button>
-        <button onClick={handleUpdateTask}>Salvar Alterações</button>
+        <button type="submit">Salvar Alterações</button>
       </form>
     </div>
   );

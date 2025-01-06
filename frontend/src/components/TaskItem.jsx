@@ -1,19 +1,12 @@
 import { EditIcon } from "../images/EditIcon";
 import { DeleteIcon } from "../images/DeleteIcon";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { deleteTask } from "../redux/taskSlice";
+import { useDispatch } from "react-redux";
 
-function TaskItem({ task, onDeleteTask }) {
+function TaskItem({ task }) {
   const navigate = useNavigate();
-
-  const handleDeleteTask = (id) => {
-    try {
-      onDeleteTask(id);
-      toast.success("Tarefa removida com sucesso!");
-    } catch (error) {
-      toast.error("Erro ao remover a tarefa.");
-    }
-  };
+  const dispatch = useDispatch();
 
   return (
     <div className="task-item">
@@ -26,7 +19,7 @@ function TaskItem({ task, onDeleteTask }) {
           <div onClick={() => navigate(`edit/${task._id}`)}>
             <EditIcon size={24} />
           </div>
-          <div onClick={() => handleDeleteTask(task._id)}>
+          <div onClick={() => dispatch(deleteTask(task._id))}>
             <DeleteIcon size={24} />
           </div>
         </div>

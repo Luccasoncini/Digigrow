@@ -1,16 +1,13 @@
 import TaskItem from "./TaskItem";
+import { useSelector } from "react-redux";
 
-function TaskList({ tasks, onDeleteTask, onUpdateTask }) {
+function TaskList() {
+  const tasks = useSelector((state) => state.task.tasks);
+
   return (
     <div className="task-list">
-      {tasks.map((task) => (
-        <TaskItem
-          key={task._id}
-          task={task}
-          onDeleteTask={onDeleteTask}
-          onUpdateTask={onUpdateTask}
-        />
-      ))}
+      {Array.isArray(tasks) &&
+        tasks.map((task) => <TaskItem key={task._id} task={task} />)}
     </div>
   );
 }
