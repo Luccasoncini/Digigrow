@@ -10,7 +10,7 @@
 
 ## 🚀 Projeto 
 
-Uma Lista de tarefas, onde eu criei toda a estrutura do backend, com um banco de dados em MongoDB, construi uma api com o express e mongoose, e um front-end em ReactJS.
+Uma lista de tarefas, onde eu criei toda a estrutura do backend, com um banco de dados em MongoDB, construí uma API com Express e Mongoose, e desenvolvi o front-end em ReactJS.
 
 
 ## 🔧 Tecnologias
